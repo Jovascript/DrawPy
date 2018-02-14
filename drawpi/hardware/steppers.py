@@ -41,15 +41,12 @@ class XYSteppers(threading.Thread):
         logger.debug("Done Executing Pulses")
 
     def run(self):
+        running_wids = deque()
         while not self.stop_event.is_set():
+            at = self.pi.wave_tx_at()
             if len(self.waveform_queue):
                 self.done.clear()
-                at = self.pi.wave_tx_at()
-                if (at == 9999) or (at == self.current_wid):
-                    if self.previous_wid is not None:
-                        logger.debug("Deleting "+ str(self.previous_wid))
-                        self.pi.wave_delete(self.previous_wid)
-                    self.previous_wid = self.current_wid
+                # If space for adding a waveform
                 if (self.pi.wave_get_max_pulses() - self.pi.wave_get_pulses()) > MAX_PULSE_PER_WAVE:
                     logger.debug("Sending New Waveform")
                     wf = self.waveform_queue.popleft()
@@ -57,20 +54,24 @@ class XYSteppers(threading.Thread):
                     logger.debug("Loaded Pulses: {}".format(self.pi.wave_get_pulses()))
 
                     self.current_wid = self.pi.wave_create()
-                    
+                    # Send the wave
                     self.pi.wave_send_using_mode(self.current_wid,
                         pigpio.WAVE_MODE_ONE_SHOT_SYNC)
+                    # Add it to the list of waveforms
+                    running_wids.append(self.current_wid)
 
-                msg = "Status: {}, {}, {}, {}".format(at, self.previous_wid, self.current_wid, len(self.waveform_queue))
+                msg = "Status: {}, {}".format( self.current_wid, len(self.waveform_queue))
                 logger.debug(msg)
             else:
-                at = self.pi.wave_tx_at()
-                if (at == 9999) or (at == self.current_wid):
-                    if self.previous_wid is not None:
-                        logger.debug("Deleting "+ str(self.previous_wid))
-                        self.pi.wave_delete(self.previous_wid)
+                # If not busy
                 if at == 9999:
                     self.done.set()
+            if (at == 9999) or (at != running_wids[0]):
+                if len(running_wids):
+                    to_delete = running_wids.popleft()
+                    self.pi.wave_delete(to_delete)
+                    logger.debug("Deleted Wave {}, {} left".format(to_delete, len(running_wids)))
+
 
     def cancel(self):
         self.stop_event.set()
