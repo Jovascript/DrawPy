@@ -66,8 +66,8 @@ class XYSteppers(threading.Thread):
                 # If not busy
                 if at == 9999:
                     self.done.set()
-            if (at == 9999) or (at != running_wids[0]):
-                if len(running_wids):
+            if len(running_wids):
+                if (at == 9999) or (at != running_wids[0]):
                     to_delete = running_wids.popleft()
                     self.pi.wave_delete(to_delete)
                     logger.debug("Deleted Wave {}, {} left".format(to_delete, len(running_wids)))
