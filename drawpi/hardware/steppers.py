@@ -43,7 +43,6 @@ class XYSteppers(threading.Thread):
     def run(self):
         running_wids = deque()
         while not self.stop_event.is_set():
-            at = self.pi.wave_tx_at()
             if len(self.waveform_queue):
                 self.done.clear()
                 # If space for adding a waveform
@@ -63,11 +62,13 @@ class XYSteppers(threading.Thread):
                 msg = "Status: {}, {}".format( self.current_wid, len(self.waveform_queue))
                 logger.debug(msg)
             else:
+                at = self.pi.wave_tx_at()
                 # If not busy
                 if at == 9999:
                     self.done.set()
             if len(running_wids):
-                if (at == 9999) or (at != running_wids[0]):
+                at = self.pi.wave_tx_at()
+                if at != running_wids[0]:
                     to_delete = running_wids.popleft()
                     self.pi.wave_delete(to_delete)
                     logger.debug("Deleted Wave {}, {} left".format(to_delete, len(running_wids)))
