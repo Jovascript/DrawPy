@@ -44,6 +44,7 @@ class Plotter:
                 y -= 1
         logger.debug("GOTO generated {} pulses".format(len(pulses)))
         self._execute_move(dirx, diry, pulses)
+        self.location = point
             
 
     
@@ -61,6 +62,7 @@ class Plotter:
         logger.debug("LINE generated {} pulses".format(len(pulses)))
         # execute thing
         self._execute_move(dir_x, dir_y, pulses)
+        self.location = finish
 
     def _generate_line_pulses(self, finish, rate):
         pulses = []
