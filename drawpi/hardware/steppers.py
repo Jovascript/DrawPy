@@ -53,7 +53,6 @@ class XYSteppers(threading.Thread):
                 if (self.pi.wave_get_max_pulses() - self.pi.wave_get_pulses()) > MAX_PULSE_PER_WAVE:
                     logger.debug("Sending New Waveform")
                     wf = self.waveform_queue.popleft()
-                    print(wf[0:10])
                     self.pi.wave_add_generic(wf)
                     logger.debug("Loaded Pulses: {}".format(self.pi.wave_get_pulses()))
 
@@ -62,12 +61,11 @@ class XYSteppers(threading.Thread):
                     self.pi.wave_send_using_mode(self.current_wid,
                         pigpio.WAVE_MODE_ONE_SHOT_SYNC)
 
-                print(at, self.previous_wid, self.current_wid, len(self.waveform_queue))
-                print(self.pi.wave_tx_at())
+                msg = "Status: {}, {}, {}, {}".format(at, self.previous_wid, self.current_wid, len(self.waveform_queue))
+                logger.debug(msg)
             else:
                 at = self.pi.wave_tx_at()
                 if (at == 9999) or (at == self.current_wid):
-                    print(self.previous_wid)
                     if self.previous_wid is not None:
                         logger.debug("Deleting "+ str(self.previous_wid))
                         self.pi.wave_delete(self.previous_wid)
