@@ -1,3 +1,19 @@
 
 # The steps per mm
 STEPS_MM = 100
+
+X_INVERTED = False
+Y_INVERTED = False
+
+X_STEP = 16
+Y_STEP = 21
+
+X_DIR = 19
+Y_DIR = 20
+
+ENABLE_STEPPER = 22
+
+
+MAX_PULSE_PER_WAVE = 680
+
+DEFAULT_FEEDRATE = 10 # MM/SECOND

@@ -1,5 +1,5 @@
 '''Class Point, for easy representaion and manipulation'''
-import utils
+import drawpi.utils as utils
 
 class Point(complex):
     def __init__(self, x, y, unit='mm'):
