@@ -2,8 +2,11 @@ from drawpi import config
 from drawpi.point import Point
 from drawpi.utils import frequency_to_delay, mm_to_steps
 from drawpi.hardware.steppers import XYSteppers
+from drawpi.logutils import get_logger
 import time
 import pigpio
+
+logger = get_logger("hardware.Plotter")
 class Plotter:
     '''Manages the plotter, and its capabilities'''
 
@@ -13,6 +16,7 @@ class Plotter:
         self.pi = pigpio.pi()
         self.setup_pins()
         self.pulse_manager = XYSteppers(self.pi)
+        logger.info("Plotter is ready")
 
 
     def _get_steps_to(self, point):
@@ -20,6 +24,7 @@ class Plotter:
         return diff.x, diff.y
 
     def goto(self, point):
+        logger.info("GOTO "+str(point))
         x, y = self._get_steps_to(point)
         dirx = diry = 1
         if (x<0):
@@ -35,11 +40,13 @@ class Plotter:
                 pulses.append([config.X_STEP, delay])
             if y > 0:
                 pulses.append([config.Y_STEP, delay])
+        logger.debug("GOTO generated {} pulses".format(len(pulses)))
         self._execute_move(dirx, diry, pulses)
             
 
     
     def draw_line(self, start, finish, rate):
+        logger.info("LINE from {} to {}".format(str(start), str(finish)))
         # ensure at start point
         self.goto(start)
         # calculate stepped finish
@@ -49,6 +56,7 @@ class Plotter:
         dir_y = y < 0
         # generate pulses
         pulses = self._generate_line_pulses(finish, mm_to_steps(rate))
+        logger.debug("LINE generated {} pulses".format(len(pulses)))
         # execute thing
         self._execute_move(dir_x, dir_y, pulses)
 
@@ -104,4 +112,4 @@ class Plotter:
         self.pulse_manager.execute_pulses(pulses)
 
         self.pulse_manager.busy.wait()
-        time.sleep(0.2)
+        self.pi.write(config.ENABLE_STEPPER, 1)
