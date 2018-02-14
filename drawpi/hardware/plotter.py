@@ -33,13 +33,15 @@ class Plotter:
         if (y<0):
             diry = 0
             y = abs(y)
-        delay = frequency_to_delay(config.DEFAULT_FEEDRATE)
+        delay = frequency_to_delay(mm_to_steps(config.DEFAULT_FEEDRATE))
         pulses = []
         while (x>0) or (y>0):
             if x > 0:
                 pulses.append([config.X_STEP, delay])
+                x -= 1
             if y > 0:
                 pulses.append([config.Y_STEP, delay])
+                y -= 1
         logger.debug("GOTO generated {} pulses".format(len(pulses)))
         self._execute_move(dirx, diry, pulses)
             
@@ -94,8 +96,9 @@ class Plotter:
         self.pi.write(config.ENABLE_STEPPER, 1)
 
     def _execute_move(self, dirx, diry, pulses):
+        logger.debug("Executing pulses")
         # Enable Steppers
-        self.pi.write(config.ENABLE_STEPPER, 1)
+        self.pi.write(config.ENABLE_STEPPER, 0)
 
         # If you've wired the stepper wrong(hehe)
         if config.X_INVERTED:
@@ -111,5 +114,6 @@ class Plotter:
 
         self.pulse_manager.execute_pulses(pulses)
 
-        self.pulse_manager.busy.wait()
+        self.pulse_manager.done.wait()
         self.pi.write(config.ENABLE_STEPPER, 1)
+        logger.debug("Done executing pulses")
