@@ -50,8 +50,12 @@ class Plotter:
         self._execute_move(dirx, diry, pulses)
         # Update location
         self.location = point
-            
 
+    def penup(self):
+        self.pi.set_servo_pulsewidth(config.PEN_SERVO, config.PEN_UP_PULSE)
+
+    def pendown(self):
+        self.pi.set_servo_pulsewidth(config.PEN_SERVO, config.PEN_DOWN_PULSE)
     
     def draw_line(self, start, finish, rate):
         logger.info("LINE from {} to {}".format(str(start), str(finish)))
@@ -99,6 +103,10 @@ class Plotter:
         self.pi.set_mode(config.X_STEP, pigpio.OUTPUT)
         self.pi.set_mode(config.Y_DIR, pigpio.OUTPUT)
         self.pi.set_mode(config.Y_STEP, pigpio.OUTPUT)
+
+        self.pi.set_mode(config.PEN_SERVO, pigpio.OUTPUT)
+        self.pi.set_servo_pulsewidth(config.PEN_SERVO, config.PEN_UP_PULSE)
+
         self.pi.set_mode(config.ENABLE_STEPPER, pigpio.OUTPUT)
         self.pi.write(config.ENABLE_STEPPER, 1)
 

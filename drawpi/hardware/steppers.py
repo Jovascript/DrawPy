@@ -5,7 +5,7 @@ from pigpio import OUTPUT
 from drawpi.config import X_STEP, Y_STEP, X_DIR, Y_DIR, ENABLE_STEPPER, MAX_PULSE_PER_WAVE
 from drawpi.utils import chunks
 import logging
-logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 class XYSteppers(threading.Thread):
     def __init__(self, pi: pigpio.pi):
         threading.Thread.__init__(self)
@@ -33,6 +33,8 @@ class XYSteppers(threading.Thread):
                 # Pulse OFF
                 wf.append(pigpio.pulse(0, 1 << pulse[0], delay))
             yield wf
+
+
 
     def execute_pulses(self, pulses):
         logger.debug("Executing {} Pulses".format(len(pulses)))
