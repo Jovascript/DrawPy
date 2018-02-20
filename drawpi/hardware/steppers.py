@@ -8,10 +8,7 @@ from time import sleep
 
 import logging
 logger = logging.getLogger(__name__)
-<<<<<<< HEAD
-=======
 
->>>>>>> 8c4a4018c98fd3501aae8af0376ac698edb7d64e
 class XYSteppers(threading.Thread):
     def __init__(self, pi: pigpio.pi):
         threading.Thread.__init__(self)
