@@ -2,11 +2,11 @@ from drawpi import config
 from drawpi.point import Point
 from drawpi.utils import frequency_to_delay, mm_to_steps
 from drawpi.hardware.steppers import XYSteppers
-from drawpi.logutils import get_logger
+import logging
 import time
 import pigpio
 
-logger = get_logger("hardware.Plotter")
+logger = logging.getLogger(__name__)
 class Plotter:
     '''Manages the plotter, and its capabilities'''
 
@@ -25,16 +25,20 @@ class Plotter:
 
     def goto(self, point):
         logger.info("GOTO "+str(point))
+        # Get no. steps to endpoint
         x, y = self._get_steps_to(point)
         dirx = diry = 1
+        # If steps are negative, change direction and make steps positive
         if (x<0):
             dirx = 0
             x = abs(x)
         if (y<0):
             diry = 0
             y = abs(y)
-        delay = frequency_to_delay(mm_to_steps(config.DEFAULT_FEEDRATE))
+        # Rate is a frequency, get us between pulses
+        delay = frequency_to_delay(mm_to_steps(config.GOTO_RATE))
         pulses = []
+        # Add pulses until correct no. of steps is achieved.
         while (x>0) or (y>0):
             if x > 0:
                 pulses.append([config.X_STEP, delay])
@@ -44,6 +48,7 @@ class Plotter:
                 y -= 1
         logger.debug("GOTO generated {} pulses".format(len(pulses)))
         self._execute_move(dirx, diry, pulses)
+        # Update location
         self.location = point
             
 
