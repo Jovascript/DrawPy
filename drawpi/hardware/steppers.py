@@ -5,6 +5,7 @@ from pigpio import OUTPUT
 from drawpi.config import X_STEP, Y_STEP, X_DIR, Y_DIR, ENABLE_STEPPER, MAX_PULSE_PER_WAVE
 from drawpi.utils import chunks
 from drawpi.logutils import get_logger
+from time import sleep
 logger = get_logger("hardware.XYSteppers")
 class XYSteppers(threading.Thread):
     def __init__(self, pi: pigpio.pi):
@@ -46,11 +47,13 @@ class XYSteppers(threading.Thread):
             if len(self.waveform_queue):
                 self.done.clear()
                 # If space for adding a waveform
-                if (self.pi.wave_get_max_pulses() - self.pi.wave_get_pulses()) > MAX_PULSE_PER_WAVE:
+                if ((self.pi.wave_get_max_pulses() - self.pi.wave_get_pulses()) > MAX_PULSE_PER_WAVE) or ((self.pi.wave_get_max_cbs() - self.pi.wave_get_cbs()) > MAX_PULSE_PER_WAVE*2):
                     logger.debug("Sending New Waveform")
                     wf = self.waveform_queue.popleft()
+                    logger.debug("CBS: {}".format(self.pi.wave_get_cbs()))
                     self.pi.wave_add_generic(wf)
                     logger.debug("Loaded Pulses: {}".format(self.pi.wave_get_pulses()))
+                    logger.debug("CBS: {}".format(self.pi.wave_get_cbs()))
 
                     self.current_wid = self.pi.wave_create()
                     # Send the wave
@@ -58,9 +61,12 @@ class XYSteppers(threading.Thread):
                         pigpio.WAVE_MODE_ONE_SHOT_SYNC)
                     # Add it to the list of waveforms
                     running_wids.append(self.current_wid)
-
-                msg = "Status: {}, {}".format( self.current_wid, len(self.waveform_queue))
+                    while (self.pi.wave_tx_at() != self.current_wid):
+                        pass
+                at = self.pi.wave_tx_at()
+                msg = "Status: at:{}, current:{}, to go:{}".format(at, self.current_wid, len(self.waveform_queue))
                 logger.debug(msg)
+                logger.debug("CBS: {}".format(self.pi.wave_get_cbs()))
             else:
                 at = self.pi.wave_tx_at()
                 # If not busy
