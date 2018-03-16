@@ -67,14 +67,15 @@ class Plotter:
                                       ]:
             self.pi.write(dirp, not inverted)
             pulses = []
-            for i in range(config.X_EXTENT):
+            steps = mm_to_steps(config.X_EXTENT)
+            for i in range(steps):
                 pulses.append([stepp, delay])
             self.pi.write(config.ENABLE_STEPPER, 0)
             self.pulse_manager.execute_pulses(pulses)
             while not self.pi.read(triggerp):
                 pass
             self.pi.write(config.ENABLE_STEPPER, 1)
-            self.pulse_manager.stop_event.wait()
+            self.pulse_manager.done.wait()
         self.location = Point(0,0)
 
 
