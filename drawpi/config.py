@@ -18,8 +18,8 @@ Y_DIR = 20
 ENABLE_STEPPER = 22
 
 # The endstop pins
-X_MIN = 23
-Y_MIN = 10
+X_MIN = 4
+Y_MIN = 17
 
 # Servo Pin
 PEN_SERVO = 18
