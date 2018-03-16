@@ -17,7 +17,7 @@ def execute_pen(command, plotter:Plotter):
         plotter.pendown()
 
 def execute_zero(command, plotter:Plotter):
-    plotter.zero()
+    plotter.zero_me()
 
 COMMANDS = {
     "goto": execute_goto,
