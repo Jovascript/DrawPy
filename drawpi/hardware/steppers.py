@@ -10,23 +10,31 @@ import logging
 logger = logging.getLogger(__name__)
 
 class XYSteppers(threading.Thread):
+    '''Class for generating and executing pulses'''
     def __init__(self, pi: pigpio.pi):
         threading.Thread.__init__(self)
+        # A daemon, cos
         self.daemon = True
+        # A reference to the pigpio pi object
         self.pi = pi
         self.pi.wave_clear()
 
+        # List of blocks, containing each set of pulses
         self.pulse_blocks = []
 
+        # The Waveform IDs
         self.previous_wid = None
         self.current_wid = None
 
+        # Threadsafe objects
         self.waveform_queue = deque()
         self.stop_event = threading.Event()
         self.done = threading.Event()
+        # Start the thread
         self.start()
 
     def generate_waveforms(self, pulses):
+        '''Generator, given a list of stepper pulses, return chunks of on and off pulses'''
         for chunk in chunks(pulses, round(MAX_PULSE_PER_WAVE/2)-1):
             wf = []
             for pulse in chunk:
@@ -40,19 +48,28 @@ class XYSteppers(threading.Thread):
 
 
     def execute_pulses(self, pulses):
+        '''Execute stepper pulses'''
         logger.debug("Executing {} Pulses".format(len(pulses)))
         for wf in self.generate_waveforms(pulses):
+            # Queue to be executed by thread
             self.waveform_queue.append(wf)
         logger.debug("Done Executing Pulses")
 
+    
+
     def run(self):
+        '''Thread function'''
+        # Running/runned waveforms
         running_wids = deque()
         while not self.stop_event.is_set():
+            # If there are waveforms to execute
             if len(self.waveform_queue):
+                # Clear the done event
                 self.done.clear()
                 # If space for adding a waveform
                 if ((self.pi.wave_get_max_pulses() - self.pi.wave_get_pulses()) > MAX_PULSE_PER_WAVE) or ((self.pi.wave_get_max_cbs() - self.pi.wave_get_cbs()) > MAX_PULSE_PER_WAVE*2):
                     logger.debug("Sending New Waveform")
+                    # Take a new waveform chunk
                     wf = self.waveform_queue.popleft()
                     logger.debug("CBS: {}".format(self.pi.wave_get_cbs()))
                     self.pi.wave_add_generic(wf)

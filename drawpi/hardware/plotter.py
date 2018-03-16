@@ -7,6 +7,8 @@ import time
 import pigpio
 
 logger = logging.getLogger(__name__)
+
+
 class Plotter:
     '''Manages the plotter, and its capabilities'''
 
@@ -18,28 +20,27 @@ class Plotter:
         self.pulse_manager = XYSteppers(self.pi)
         logger.info("Plotter is ready")
 
-
     def _get_steps_to(self, point):
         diff = point - self.location
         return diff.x, diff.y
 
-    def goto(self, point):
-        logger.info("GOTO "+str(point))
+    def goto(self, point, wait=True):
+        logger.info("GOTO " + str(point))
         # Get no. steps to endpoint
         x, y = self._get_steps_to(point)
         dirx = diry = 1
         # If steps are negative, change direction and make steps positive
-        if (x<0):
+        if (x < 0):
             dirx = 0
             x = abs(x)
-        if (y<0):
+        if (y < 0):
             diry = 0
             y = abs(y)
         # Rate is a frequency, get us between pulses
         delay = frequency_to_delay(mm_to_steps(config.GOTO_RATE))
         pulses = []
         # Add pulses until correct no. of steps is achieved.
-        while (x>0) or (y>0):
+        while (x > 0) or (y > 0):
             if x > 0:
                 pulses.append([config.X_STEP, delay])
                 x -= 1
@@ -47,7 +48,7 @@ class Plotter:
                 pulses.append([config.Y_STEP, delay])
                 y -= 1
         logger.debug("GOTO generated {} pulses".format(len(pulses)))
-        self._execute_move(dirx, diry, pulses)
+        self._execute_move(dirx, diry, pulses, wait)
         # Update location
         self.location = point
 
@@ -56,7 +57,29 @@ class Plotter:
 
     def pendown(self):
         self.pi.set_servo_pulsewidth(config.PEN_SERVO, config.PEN_DOWN_PULSE)
-    
+
+    def zero_me(self):
+        delay = frequency_to_delay(mm_to_steps(config.ZERO_RATE))
+        for stepp, dirp, inverted, triggerp in [
+            [config.X_STEP, config.X_DIR, config.X_INVERTED, config.X_MIN],
+                                      [config.Y_STEP, config.Y_DIR,
+                                          config.Y_INVERTED, config.Y_MIN]
+                                      ]:
+            self.pi.write(dirp, not inverted)
+            pulses = []
+            for i in range(config.X_EXTENT):
+                pulses.append([stepp, delay])
+            self.pi.write(config.ENABLE_STEPPER, 0)
+            self.pulse_manager.execute_pulses(pulses)
+            while not self.pi.read(triggerp):
+                pass
+            self.pi.write(config.ENABLE_STEPPER, 1)
+            self.pulse_manager.stop_event.wait()
+        self.location = Point(0,0)
+
+
+            
+
     def draw_line(self, start, finish, rate):
         logger.info("LINE from {} to {}".format(str(start), str(finish)))
         # ensure at start point
@@ -110,7 +133,7 @@ class Plotter:
         self.pi.set_mode(config.ENABLE_STEPPER, pigpio.OUTPUT)
         self.pi.write(config.ENABLE_STEPPER, 1)
 
-    def _execute_move(self, dirx, diry, pulses):
+    def _execute_move(self, dirx, diry, pulses, wait=True):
         logger.debug("Executing pulses")
         # Enable Steppers
         self.pi.write(config.ENABLE_STEPPER, 0)
@@ -121,7 +144,6 @@ class Plotter:
         if config.Y_INVERTED:
             diry = not diry
 
-
         # Set direction
         # TODO: Rewrite to support changing directions..
         self.pi.write(config.X_DIR, dirx)
@@ -129,6 +151,7 @@ class Plotter:
 
         self.pulse_manager.execute_pulses(pulses)
 
-        self.pulse_manager.done.wait()
-        self.pi.write(config.ENABLE_STEPPER, 1)
-        logger.debug("Done executing pulses")
+        if wait:
+            self.pulse_manager.done.wait()
+            self.pi.write(config.ENABLE_STEPPER, 1)
+            logger.debug("Done executing pulses")
