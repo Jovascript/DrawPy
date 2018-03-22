@@ -1,8 +1,6 @@
-GT 0 10
-PD
-GT 10 10
-PU
-GT 10 0
-PD
 GT 0 0
 PU
+GT 70 70
+PD
+ZE
+

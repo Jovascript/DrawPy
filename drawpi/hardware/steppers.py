@@ -71,10 +71,8 @@ class XYSteppers(threading.Thread):
                     logger.debug("Sending New Waveform")
                     # Take a new waveform chunk
                     wf = self.waveform_queue.popleft()
-                    logger.debug("CBS: {}".format(self.pi.wave_get_cbs()))
                     self.pi.wave_add_generic(wf)
                     logger.debug("Loaded Pulses: {}".format(self.pi.wave_get_pulses()))
-                    logger.debug("CBS: {}".format(self.pi.wave_get_cbs()))
 
                     self.current_wid = self.pi.wave_create()
                     # Send the wave
@@ -102,9 +100,7 @@ class XYSteppers(threading.Thread):
 
     def slow_stop(self):
         self.waveform_queue.clear()
-        self.pi.wave_tx_stop()
-        for wf in self.running_wids:
-            self.pi.wave_delete(wf)
+
     def cancel(self):
         self.stop_event.set()
 
