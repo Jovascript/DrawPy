@@ -68,7 +68,7 @@ class Plotter:
                                       [config.Y_STEP, config.Y_DIR,
                                           config.Y_INVERTED, config.Y_MIN]
                                       ]:
-            self.pi.write(dirp, not inverted)
+            self.pi.write(dirp, inverted)
             pulses = []
             steps = mm_to_steps(config.X_EXTENT)
             for i in range(steps):
