@@ -1,10 +1,10 @@
 
 # The steps per mm
-STEPS_MM = 100
+STEPS_MM = 50
 
 # Invert the direction of the motor for this axis?
 X_INVERTED = False
-Y_INVERTED = True
+Y_INVERTED = False
 
 # STEP gpio pin for axis
 X_STEP = 16
@@ -42,5 +42,5 @@ ZERO_RATE = 5
 X_EXTENT = 200
 Y_EXTENT = 200
 DEFAULTS = {
-    "feedrate": 10 # MM/SECOND
+    "feedrate": 15 # MM/SECOND
 }
