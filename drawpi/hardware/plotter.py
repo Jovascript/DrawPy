@@ -92,8 +92,8 @@ class Plotter:
         # calculate stepped finish
         x, y = self._get_steps_to(finish)
         # Calculate directions
-        dir_x = x < 0
-        dir_y = y < 0
+        dir_x = x > 0
+        dir_y = y > 0
         # generate pulses
         pulses = self._generate_line_pulses((x,y), mm_to_steps(rate))
         logger.debug("LINE generated {} pulses".format(len(pulses)))
