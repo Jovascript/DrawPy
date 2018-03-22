@@ -26,6 +26,8 @@ PEN_SERVO = 18
 # Up and down pulse lengths
 PEN_UP_PULSE = 2000
 PEN_DOWN_PULSE = 1000
+# Time for servo to move in seconds.
+PEN_MOVE_DELAY = 1
 
 # Maximum number of pulses per block of waves
 MAX_PULSE_PER_WAVE = 680

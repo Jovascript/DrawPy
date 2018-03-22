@@ -54,9 +54,11 @@ class Plotter:
 
     def penup(self):
         self.pi.set_servo_pulsewidth(config.PEN_SERVO, config.PEN_UP_PULSE)
+        time.sleep(config.PEN_MOVE_DELAY)
 
     def pendown(self):
         self.pi.set_servo_pulsewidth(config.PEN_SERVO, config.PEN_DOWN_PULSE)
+        time.sleep(config.PEN_MOVE_DELAY)
 
     def zero_me(self):
         delay = frequency_to_delay(mm_to_steps(config.ZERO_RATE))
@@ -75,6 +77,7 @@ class Plotter:
             while not self.pi.read(triggerp):
                 pass
             self.pi.write(config.ENABLE_STEPPER, 1)
+            self.pulse_manager.slow_stop()
             self.pulse_manager.done.wait()
         self.location = Point(0,0)
 

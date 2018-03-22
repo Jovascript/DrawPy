@@ -100,7 +100,11 @@ class XYSteppers(threading.Thread):
                     self.pi.wave_delete(to_delete)
                     logger.debug("Deleted Wave {}, {} left".format(to_delete, len(running_wids)))
 
-
+    def slow_stop(self):
+        self.waveform_queue.clear()
+        self.pi.wave_tx_stop()
+        for wf in self.running_wids:
+            self.pi.wave_delete(wf)
     def cancel(self):
         self.stop_event.set()
 
