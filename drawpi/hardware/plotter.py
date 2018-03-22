@@ -94,7 +94,7 @@ class Plotter:
         dir_x = x < 0
         dir_y = y < 0
         # generate pulses
-        pulses = self._generate_line_pulses(finish, mm_to_steps(rate))
+        pulses = self._generate_line_pulses((x,y), mm_to_steps(rate))
         logger.debug("LINE generated {} pulses".format(len(pulses)))
         # execute thing
         self._execute_move(dir_x, dir_y, pulses)
