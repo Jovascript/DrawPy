@@ -60,7 +60,6 @@ class XYSteppers(threading.Thread):
     def run(self):
         '''Thread function'''
         # Running/runned waveforms
-        running_wids = deque()
         while not self.stop_event.is_set():
             # If there are waveforms to execute
             if len(self.waveform_queue):
@@ -76,12 +75,17 @@ class XYSteppers(threading.Thread):
 
                     self.current_wid = self.pi.wave_create()
                     # Send the wave
-                    self.pi.wave_send_using_mode(self.current_wid,
+                    if self.previous_wid != None:
+                        self.pi.wave_send_using_mode(self.current_wid,
                         pigpio.WAVE_MODE_ONE_SHOT_SYNC)
+                    else:
+                        self.pi.wave_send_once(self.current_wid)
                     # Add it to the list of waveforms
-                    running_wids.append(self.current_wid)
                     while (self.pi.wave_tx_at() != self.current_wid):
-                        print("NOO")
+                        pass
+                    if self.previous_wid != None:
+                        self.pi.wave_delete(self.previous_wid)
+                    self.previous_wid = self.current_wid
                 at = self.pi.wave_tx_at()
                 msg = "Status: at:{}, current:{}, to go:{}".format(at, self.current_wid, len(self.waveform_queue))
                 logger.debug(msg)
@@ -91,12 +95,6 @@ class XYSteppers(threading.Thread):
                 # If not busy
                 if at == 9999:
                     self.done.set()
-            if len(running_wids):
-                at = self.pi.wave_tx_at()
-                if at != running_wids[0]:
-                    to_delete = running_wids.popleft()
-                    self.pi.wave_delete(to_delete)
-                    logger.debug("Deleted Wave {}, {} left".format(to_delete, len(running_wids)))
 
     def slow_stop(self):
         self.waveform_queue.clear()
