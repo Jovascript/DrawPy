@@ -48,7 +48,8 @@ class Plotter:
                 pulses.append([config.Y_STEP, delay])
                 y -= 1
         logger.debug("GOTO generated {} pulses".format(len(pulses)))
-        self._execute_move(dirx, diry, pulses, wait)
+        if len(pulses):
+            self._execute_move(dirx, diry, pulses, wait)
         # Update location
         self.location = point
 
@@ -97,7 +98,8 @@ class Plotter:
         pulses = self._generate_line_pulses((x,y), mm_to_steps(rate))
         logger.debug("LINE generated {} pulses".format(len(pulses)))
         # execute thing
-        self._execute_move(dir_x, dir_y, pulses)
+        if len(pulses):
+            self._execute_move(dir_x, dir_y, pulses)
         self.location = finish
 
     def _generate_line_pulses(self, finish, rate):
