@@ -81,7 +81,7 @@ class XYSteppers(threading.Thread):
                     # Add it to the list of waveforms
                     running_wids.append(self.current_wid)
                     while (self.pi.wave_tx_at() != self.current_wid):
-                        pass
+                        print("NOO")
                 at = self.pi.wave_tx_at()
                 msg = "Status: at:{}, current:{}, to go:{}".format(at, self.current_wid, len(self.waveform_queue))
                 logger.debug(msg)
