@@ -21,7 +21,7 @@ def convert_to_jcode(hpgl_text:str, steps_per_mm=1):
                 coords = [coords[i:i+2] for i  in range(0, len(coords), 2)]
                 for coord in coords:
                     if move:
-                        result += "MV "
+                        result += "GT "
                     else:
                         result += "LN "
                     for i in range(len(coord)):
