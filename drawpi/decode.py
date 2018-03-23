@@ -7,6 +7,7 @@ from drawpi.point import Point
 
 
 class ParseError(Exception):
+    '''Error in parsing the provided commands'''
     pass
 
 
@@ -14,9 +15,13 @@ class PlotterParser:
     COMMANDS = ["SP", "ZE", "PU", "PD", "LN", "GT"]
 
     def __init__(self, commands):
+        # The command text
         self.text = commands
+        # Default settings
         self.settings = drawpi.config.DEFAULTS
+        # The line no. (for error messages)
         self.line = 0
+        # The parsers for each command'''
         self.COMMAND_PARSERS = [
             self.parse_feedrate,
             self.parse_gotozero,

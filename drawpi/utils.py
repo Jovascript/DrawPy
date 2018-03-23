@@ -2,9 +2,11 @@ import drawpi.config as config
 
 
 def steps_to_mm(steps):
+    '''Convert no. of steps to millimetres'''
     return steps/config.STEPS_MM
 
 def mm_to_steps(mm):
+    '''Convert no. of millimetres to steps'''
     return round(mm*config.STEPS_MM)
 
 def chunks(l, n):

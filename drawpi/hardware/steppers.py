@@ -35,9 +35,12 @@ class XYSteppers(threading.Thread):
 
     def generate_waveforms(self, pulses):
         '''Generator, given a list of stepper pulses, return chunks of on and off pulses'''
+        # Split into correctly sized chunks
         for chunk in chunks(pulses, round(MAX_PULSE_PER_WAVE/2)-1):
             wf = []
+            # For each pulse
             for pulse in chunk:
+                # Round delay, divide by 2(each pulse -> on and then off)
                 delay = round(pulse[1]/2)
                 # Pulse ON
                 wf.append(pigpio.pulse(1 << pulse[0], 0, delay))
@@ -70,22 +73,29 @@ class XYSteppers(threading.Thread):
                     logger.debug("Sending New Waveform")
                     # Take a new waveform chunk
                     wf = self.waveform_queue.popleft()
+                    # Add the chunk
                     self.pi.wave_add_generic(wf)
                     logger.debug("Loaded Pulses: {}".format(self.pi.wave_get_pulses()))
 
+                    # Create the waveform in the DMC memory
                     self.current_wid = self.pi.wave_create()
                     # Send the wave
                     if self.previous_wid != None:
+                        # If already transmitting, sync to previous
                         self.pi.wave_send_using_mode(self.current_wid,
                         pigpio.WAVE_MODE_ONE_SHOT_SYNC)
                     else:
+                        # Just send
                         self.pi.wave_send_once(self.current_wid)
-                    # Add it to the list of waveforms
+                    
+                    # Wait for it to start being executed
                     while (self.pi.wave_tx_at() != self.current_wid):
                         pass
+                    # We can now delete the previous waveform(if it exists)
                     if self.previous_wid != None:
                         self.pi.wave_delete(self.previous_wid)
                     self.previous_wid = self.current_wid
+                # Debugging logs
                 at = self.pi.wave_tx_at()
                 msg = "Status: at:{}, current:{}, to go:{}".format(at, self.current_wid, len(self.waveform_queue))
                 logger.debug(msg)
@@ -94,11 +104,14 @@ class XYSteppers(threading.Thread):
                 at = self.pi.wave_tx_at()
                 # If not busy
                 if at == 9999:
+                    # Tell everyone we are done
                     self.done.set()
 
     def slow_stop(self):
+        # Remove pending waveforms
         self.waveform_queue.clear()
 
     def cancel(self):
+        # Stop the whole thread
         self.stop_event.set()
 
