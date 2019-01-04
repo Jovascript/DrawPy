@@ -46,3 +46,9 @@ class Point:
         return "Point({}, {})".format(self.x, self.y)
     def __format__(self, spec):
         return self.__repr__()
+
+    def __eq__(self, other):
+        if isinstance(other, Point):
+            if self.x == other.x and self.y == other.y:
+                return True
+        return False

@@ -48,6 +48,12 @@ class XYSteppers(threading.Thread):
                 wf.append(pigpio.pulse(0, 1 << pulse[0], delay))
             yield wf
 
+    def add_pulses(self, pulses):
+        pass
+
+    def add_change_dir(self, dirX, dirY):
+        pass
+
 
 
     def execute_pulses(self, pulses):

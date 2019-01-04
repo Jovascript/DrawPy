@@ -32,9 +32,10 @@ COMMANDS = {
     "pen": execute_pen
 }
 
-def setup_logging():
+def setup_logging(verbose=False):
     '''Setup logging for everything else'''
-    logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
+    level = logging.DEBUG if verbose else logging.info
+    logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S", level=level)
 
 def main(commands):
     # Initialise command parser(parses jcode)
@@ -43,7 +44,11 @@ def main(commands):
     plotter = Plotter()
     parsed = list(parser)
     # Run commands, one by one, according to the appropriate function.
-    for command in parsed:
-        COMMANDS[command["type"]](command, plotter)
+    try:
+        for command in parsed:
+            COMMANDS[command["type"]](command, plotter)
+    finally:
+        plotter.stop()
+
 
 

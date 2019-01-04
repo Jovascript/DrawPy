@@ -21,6 +21,9 @@ ENABLE_STEPPER = 22
 X_MIN = 4
 Y_MIN = 17
 
+X_END_INVERTED = False
+Y_END_INVERTED = False
+
 # Servo Pin
 PEN_SERVO = 18
 # Up and down pulse lengths
@@ -44,3 +47,6 @@ Y_EXTENT = 200
 DEFAULTS = {
     "feedrate": 15 # MM/SECOND
 }
+
+
+PREFERRED_PULSE_BATCH = 100
