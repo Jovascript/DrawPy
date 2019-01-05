@@ -203,7 +203,7 @@ class DMAGPIO(DMAProto):
             self._phys_memory.write(current_address, "8I", data)
             current_address += self._DMA_CONTROL_BLOCK_SIZE
         oldaddr = self.__current_address
-        self.__current_address = current_address - self._phys_memory.get_bus_address()
+        self.__current_address = current_address
         # Finalise the block
         self._phys_memory.write_int(self.__current_address + 20
                                     - self._DMA_CONTROL_BLOCK_SIZE, 0)
