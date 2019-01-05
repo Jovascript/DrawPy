@@ -27,13 +27,11 @@ Y_END_INVERTED = False
 # Servo Pin
 PEN_SERVO = 18
 # Up and down pulse lengths
-PEN_UP_PULSE = 2000
-PEN_DOWN_PULSE = 1000
+PEN_UP_PULSE = 2300
+PEN_DOWN_PULSE = 1540
 # Time for servo to move in seconds.
 PEN_MOVE_DELAY = 1
 
-# Maximum number of pulses per block of waves
-MAX_PULSE_PER_WAVE = 680
 
 # The feedrate for gotos(max reliable rate)
 GOTO_RATE = 20
@@ -49,4 +47,4 @@ DEFAULTS = {
 }
 
 
-PREFERRED_PULSE_BATCH = 100
+PREFERRED_PULSE_BATCH = 1000
