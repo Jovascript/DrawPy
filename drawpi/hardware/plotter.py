@@ -47,7 +47,7 @@ class Plotter:
         logger.debug("Added pulse {}".format((pulse[0], pulse[1])))
         if len(pulse) > 2:
             self.pulses.append((pulse[2],))
-            logger.debug("Added pulse {}".format((pulse[2],))
+            logger.debug("Added pulse {}".format((pulse[2],)))
         if len(self.pulses) > config.PREFERRED_PULSE_BATCH:
             logger.debug("Committing Pulses")
             # Enable steppers
