@@ -1,82 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="210" height="297" xmlns="http://www.w3.org/2000/svg">
 
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 210 297"
-   version="1.1"
-   id="svg8"
-   inkscape:version="0.92.1 r15371"
-   sodipodi:docname="demo.svg">
-  <defs
-     id="defs2" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="1.5349397"
-     inkscape:cx="396.85039"
-     inkscape:cy="847.91606"
-     inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
-     showgrid="false"
-     inkscape:window-width="3840"
-     inkscape:window-height="2019"
-     inkscape:window-x="-14"
-     inkscape:window-y="-14"
-     inkscape:window-maximized="1" />
-  <metadata
-     id="metadata5">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1">
-    <rect
-       style="fill:none;fill-opacity:1;stroke:#0000ff;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect4485"
-       width="100"
-       height="100"
-       x="0.1"
-       y="0.89999998" />
-    <circle
-       style="fill:none;fill-opacity:1;stroke:#0000ff;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="path4487"
-       cx="50"
-       cy="51.000008"
-       r="24.9" />
-    <path
-       sodipodi:type="spiral"
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.2399016"
-       id="path4489"
-       sodipodi:cx="50.333138"
-       sodipodi:cy="248.56297"
-       sodipodi:expansion="1.91"
-       sodipodi:revolution="3"
-       sodipodi:radius="23.717527"
-       sodipodi:argument="-18.281712"
-       sodipodi:t0="0"
-       d="m 50.333138,248.56297 c 0.07897,0.0504 -0.07761,0.16286 -0.110782,0.17366 -0.335762,0.1093 -0.547595,-0.32329 -0.541838,-0.58998 0.01656,-0.76698 0.902158,-1.12026 1.555787,-0.99945 1.33652,0.24702 1.882805,1.78851 1.549437,2.98037 -0.572624,2.04724 -2.972196,2.83265 -4.848675,2.1914 -2.898654,-0.99055 -3.966864,-4.44597 -2.924544,-7.15018 1.499104,-3.8893 6.20432,-5.28278 9.876829,-3.74799 5.017597,2.09693 6.778058,8.24276 4.660896,13.02206 -2.782872,6.28207 -10.557539,8.45065 -16.58037,5.66251 -7.681374,-3.55592 -10.298744,-13.14545 -6.752131,-20.54705 4.415186,-9.21426 16.003674,-12.32072 24.917957,-7.92909 10.879632,5.35986 14.515112,19.12971 9.192786,29.68941"
-       transform="matrix(0.99347806,0,0,1.2243353,19.129667,-227.5133)" />
-  </g>
+ <metadata id="metadata5">image/svg+xml</metadata>
+ <g>
+  <rect fill="none" stroke="#0000ff" stroke-width="0.2" stroke-miterlimit="4" y="0.9" x="0.1" height="100" width="100" id="rect4485"/>
+  <circle fill="none" stroke="#0000ff" stroke-width="0.2" stroke-miterlimit="4" r="24.9" cy="51.000008" cx="50" id="path4487"/>
+  <path fill="none" fill-rule="evenodd" stroke="#000000" stroke-width="0.239902" d="m69.134537,76.811118c0.078455,0.061706 -0.077104,0.199395 -0.110057,0.212618c-0.33358,0.13382 -0.544029,-0.395815 -0.538306,-0.722333c0.016452,-0.939041 0.896276,-1.371574 1.545643,-1.223662c1.327803,0.302435 1.87052,2.189736 1.539325,3.648972c-0.568885,2.506508 -2.952806,3.468113 -4.817047,2.683008c-2.879755,-1.212765 -3.940998,-5.443358 -2.905476,-8.754218c1.489333,-4.761807 6.163856,-6.467894 9.812414,-4.588796c4.984876,2.567345 6.733854,10.091902 4.630502,15.943368c-2.76472,7.69136 -10.488684,10.346429 -16.472234,6.932811c-7.631283,-4.353638 -10.231582,-16.094438 -6.708093,-25.156479c4.386384,-11.281344 15.899295,-15.084692 24.755437,-9.707865c10.808684,6.562266 14.420453,23.421179 9.132835,36.349793" id="path4489"/>
+ </g>
 </svg>
