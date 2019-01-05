@@ -14,7 +14,7 @@ def execute_goto(command, plotter:Plotter):
 
 def execute_pen(command, plotter:Plotter):
     '''Run a pen change command'''
-    if command["state"]:
+    if not command["state"]:
         plotter.penup()
     else:
         plotter.pendown()
@@ -34,7 +34,7 @@ COMMANDS = {
 
 def setup_logging(verbose=False):
     '''Setup logging for everything else'''
-    level = logging.DEBUG if verbose else logging.info
+    level = logging.DEBUG if verbose else logging.INFO
     logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S", level=level)
 
 def main(commands):

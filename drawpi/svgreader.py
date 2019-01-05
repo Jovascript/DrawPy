@@ -102,13 +102,13 @@ def getEllipsePath(cx, cy, rx, ry):
     return "M {} {} a {} {} 0 1 0 {} 0 a {} {} 0 1 0 {} 0".format(cx-rx, cy, rx, ry, rx*2, rx, ry, -(rx*2))
 
 def getLinePath(x1, y1, x2, y2):
-    return f"M {x1} {y2} L {x2} {y2}"
+    return "M {} {} L {} {}".format(x1, y1, x2, y2)
 
 def getLinesPath(start_coords, *rest, closed=False):
     x, y = start_coords
-    s = f"M {x} {y} "
+    s = "M {} {} ".format(x, y)
     for (x, y) in rest:
-        s += f"L {x} {y} "
+        s += "L {} {} ".format(x, y)
     if closed:
         s += "Z"
     return s

@@ -179,12 +179,12 @@ class DMAGPIO(DMAProto):
         elif number > len(self.blocks_queue) :
             raise IndexError("Cannot insert this many blocks.")
         # The address of the first CB to add
-        current_address = self._phys_memory.get_bus_address() + self.__current_address
+        current_address = self.__current_address
         # Loop thru pulses
         for _ in range(number):
             p = self.blocks_queue.popleft()
             # Address of next cb
-            next1 = current_address + self._DMA_CONTROL_BLOCK_SIZE
+            next1 = current_address + self._DMA_CONTROL_BLOCK_SIZE + self._phys_memory.get_bus_address()
             source = next1 - 8  # last 8 bytes are padding, use it to store data
             if len(p) > 1:
 
@@ -202,7 +202,7 @@ class DMAGPIO(DMAProto):
                 )
 
             self._phys_memory.write(current_address, "8I", data)
-            current_address = next1
+            current_address += self._DMA_CONTROL_BLOCK_SIZE
         oldaddr = self.__current_address
         self.__current_address = current_address - self._phys_memory.get_bus_address()
         # Finalise the block
