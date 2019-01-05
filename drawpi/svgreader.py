@@ -99,7 +99,7 @@ class SVGRoot(Group):
 
 
 def getEllipsePath(cx, cy, rx, ry):
-    return f"M {cx-rx} {cy} a {rx} {ry} 0 1 0 {rx * 2} 0 a {rx} {ry} 0 1 0 {-(rx * 2)} 0"
+    return "M {} {} a {} {} 0 1 0 {} 0 a {} {} 0 1 0 {} 0".format(cx-rx, cy, rx, ry, rx*2, rx, ry, -(rx*2))
 
 def getLinePath(x1, y1, x2, y2):
     return f"M {x1} {y2} L {x2} {y2}"
