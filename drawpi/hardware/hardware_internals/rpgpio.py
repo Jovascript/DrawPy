@@ -186,7 +186,7 @@ class DMAGPIO(DMAProto):
             # Address of next cb
             next1 = current_address + self._DMA_CONTROL_BLOCK_SIZE + self._phys_memory.get_bus_address()
             source = next1 - 8  # last 8 bytes are padding, use it to store data
-            if len(p) < 3:
+            if len(p) > 1:
                 data = (
                     self._pulse_info, source, self._pulse_destination,
                     self._pulse_length, self._pulse_stride, next1,
@@ -194,7 +194,7 @@ class DMAGPIO(DMAProto):
                 )
             else:
                 # Is a delay
-                length = p[2] << 4  # * 16
+                length = p[0] << 4  # * 16
                 data = (
                 self._delay_info, source, self._delay_destination, length,
                 self._delay_stride, next1, 0, 0
