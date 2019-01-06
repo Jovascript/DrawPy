@@ -2,7 +2,7 @@ import threading
 from collections import deque
 import pigpio
 from pigpio import OUTPUT
-from drawpi.config import X_STEP, Y_STEP, X_DIR, Y_DIR, ENABLE_STEPPER, MAX_PULSE_PER_WAVE
+from drawpi.config import X_STEP, Y_STEP, X_DIR, Y_DIR, ENABLE_STEPPER
 from drawpi.utils import chunks
 from time import sleep
 

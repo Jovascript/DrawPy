@@ -154,7 +154,8 @@ def getPath(elem):
         coordlist = coordlist.replace(',', ' ').replace('-', ' -')
         coordlist = coordlist.replace('NEGEXP', 'e-')
         coordlist = [float(x) for x in coordlist.split()]
-        return Shape(getLinesPath(coordlist[0], *coordlist[1:], closed=closed))
+        tupled_list = [(coordlist[i], coordlist[i+1]) for i in range(0, len(coordlist), 2)]
+        return Shape(getLinesPath(tupled_list[0], *tupled_list[1:], closed=closed))
     elif elem.tag == "rect":
         x = float(elem.attrib["x"])
         y = float(elem.attrib["y"])

@@ -47,6 +47,7 @@ def main(commands):
     try:
         for command in parsed:
             COMMANDS[command["type"]](command, plotter)
+        plotter.wait_till_idle()
     finally:
         plotter.stop()
 
